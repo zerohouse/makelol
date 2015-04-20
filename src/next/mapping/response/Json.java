@@ -1,4 +1,4 @@
-package next.mapping.view;
+package next.mapping.response;
 
 import next.mapping.http.Http;
 
@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-public class Json implements View {
+public class Json implements Response {
 
 	private Object object;
 	private String dateformat;

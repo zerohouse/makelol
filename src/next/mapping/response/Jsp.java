@@ -1,4 +1,4 @@
-package next.mapping.view;
+package next.mapping.response;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import next.mapping.http.Http;
 import next.setting.Setting;
 
-public class Jsp implements View {
+public class Jsp implements Response {
 
 	private String jspFileName;
 

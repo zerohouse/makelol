@@ -3,7 +3,6 @@ package next.mapping.dispatch;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,18 +15,19 @@ import ch.qos.logback.classic.Logger;
 import next.mapping.http.HttpImpl;
 import next.setting.Setting;
 
-@MultipartConfig(location = "webapp/uploads", maxFileSize = 1024 * 1024 * 10, fileSizeThreshold = 1024 * 1024, maxRequestSize = 1024 * 1024 * 20)
+//@MultipartConfig(location = "webapp/uploads", maxFileSize = 1024 * 1024 * 10, fileSizeThreshold = 1024 * 1024, maxRequestSize = 1024 * 1024 * 20)
 @WebServlet(loadOnStartup = 1)
 public class Dispatcher extends HttpServlet {
 
 	private static final long serialVersionUID = -2929326068606297558L;
-	private Mapper mapper = new Mapper();
+	private Mapper mapper;
 
 	@Override
 	public void init() throws ServletException {
+		mapper = new Mapper();
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 		Level lv;
-		switch (Setting.get("LogLevel")) {
+		switch (Setting.get("logLevel")) {
 		case "OFF":
 			lv = Level.OFF;
 			break;

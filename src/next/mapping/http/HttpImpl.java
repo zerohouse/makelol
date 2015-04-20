@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import next.mapping.view.View;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -21,7 +19,6 @@ public class HttpImpl implements Http {
 	private HttpServletRequest req;
 	private HttpServletResponse resp;
 	private ArrayList<String> uriVariables;
-	private View view;
 
 	@Override
 	public String getParameter(String name) {
@@ -149,18 +146,6 @@ public class HttpImpl implements Http {
 	}
 
 	@Override
-	public void render() {
-		if (view == null)
-			return;
-		view.render(this);
-	}
-
-	@Override
-	public void setView(View view) {
-		this.view = view;
-	}
-
-	@Override
 	public void setAttribute(String key, Object value) {
 		req.setAttribute(key, value);
 	}
@@ -181,7 +166,7 @@ public class HttpImpl implements Http {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Collection<Part> getParts() {
 		try {

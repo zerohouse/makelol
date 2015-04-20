@@ -1,8 +1,6 @@
 package next.database;
 
 import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -14,7 +12,6 @@ import java.util.Map;
 
 import next.database.sql.KeyParams;
 import next.database.sql.NullableParams;
-import next.setting.Setting;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,44 +20,10 @@ public class DAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(DAO.class);
 
-	public static Connection getConnection() {
-		Connection con = null;
-		String url = Setting.get("database", "url");
-		String id = Setting.get("database", "id");
-		String pw = Setting.get("database", "password");
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection(url, id, pw);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return con;
-	}
-
-	Connection conn;
+	private ConnectionManager conn;
 
 	public DAO() {
-		conn = getConnection();
-		try {
-			conn.setAutoCommit(false);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static PreparedStatement getPSTMT(Connection conn, String sql, Object[] parameters) {
-		PreparedStatement pstmt = null;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			if (parameters != null)
-				for (int j = 0; j < parameters.length; j++) {
-					pstmt.setObject(j + 1, parameters[j]);
-				}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		logger.debug(pstmt.toString());
-		return pstmt;
+		conn = new ConnectionManager();
 	}
 
 	public List<Object> getRecord(String sql, int resultSize, Object... parameters) {
@@ -68,7 +31,7 @@ public class DAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			pstmt = getPSTMT(conn, sql, parameters);
+			pstmt = conn.getPSTMT(sql, parameters);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				if (record == null)
@@ -91,7 +54,7 @@ public class DAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			pstmt = getPSTMT(conn, sql, parameters);
+			pstmt = conn.getPSTMT(sql, parameters);
 			rs = pstmt.executeQuery();
 			ResultSetMetaData metaData = rs.getMetaData();
 			int columnCount = metaData.getColumnCount();
@@ -118,7 +81,7 @@ public class DAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			pstmt = getPSTMT(conn, sql, parameters);
+			pstmt = conn.getPSTMT(sql, parameters);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				if (result == null)
@@ -144,7 +107,7 @@ public class DAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			pstmt = getPSTMT(conn, sql, parameters);
+			pstmt = conn.getPSTMT(sql, parameters);
 			rs = pstmt.executeQuery();
 			ResultSetMetaData metaData = rs.getMetaData();
 			int columnCount = metaData.getColumnCount();
@@ -221,10 +184,7 @@ public class DAO {
 	public Boolean execute(String sql, Object... parameters) {
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = conn.prepareStatement(sql);
-			for (int j = 0; j < parameters.length; j++) {
-				pstmt.setObject(j + 1, parameters[j]);
-			}
+			pstmt = conn.getPSTMT(sql, parameters);
 			logger.debug(pstmt.toString());
 			pstmt.execute();
 			return true;
@@ -258,24 +218,11 @@ public class DAO {
 	}
 
 	public void close() {
-		if (conn != null)
-			try {
-				conn.close();
-			} catch (SQLException sqle) {
-			}
+		conn.close();
 	}
 
 	public void commit() {
-		try {
-			conn.commit();
-		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		}
+		conn.commit();
 	}
 
 	private final static String INSERT = "INSERT %s SET %s";

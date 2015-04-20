@@ -7,8 +7,6 @@ import java.util.Collection;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
 
-import next.mapping.view.View;
-
 public interface Http {
 
 	String getParameter(String name);
@@ -44,10 +42,6 @@ public interface Http {
 	void sendError(int errorNo);
 
 	void sendError(int errorNo, String errorMesage);
-
-	void render();
-
-	void setView(View view);
 
 	void setAttribute(String key, Object value);
 

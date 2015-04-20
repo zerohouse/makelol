@@ -1,9 +1,9 @@
-package next.mapping.view;
+package next.mapping.response;
 
 import next.mapping.http.Http;
 
 
-public interface View {
+public interface Response {
 
 	void render(Http http);
 
