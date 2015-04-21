@@ -5,7 +5,8 @@
 	"jspPath" : "/WEB-INF/jsp/",
 	"logger" : {
 		"level" : "DEBUG",
-		"pattern" : "%date %level [%thread] %logger{10} [%file:%line] %msg%n"
+		"file" : "/log.log",
+		"pattern" : "%date %level %logger{10} [%file:%line] %msg%n [%thread]"
 	},
 	"database" : {
 		"url" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",

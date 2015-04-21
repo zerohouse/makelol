@@ -17,6 +17,8 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.FileAppender;
 
 //@MultipartConfig(location = "webapp/uploads", maxFileSize = 1024 * 1024 * 10, fileSizeThreshold = 1024 * 1024, maxRequestSize = 1024 * 1024 * 20)
 public class Dispatcher extends HttpServlet {
@@ -44,7 +46,22 @@ public class Dispatcher extends HttpServlet {
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		PatternLayoutEncoder ple = new PatternLayoutEncoder();
 		patternSetting(lc, ple);
+		fileSetting(root, lc, ple);
 		levelSetting(root);
+	}
+
+	private void fileSetting(Logger root, LoggerContext lc, PatternLayoutEncoder ple) {
+		String file = Setting.getString("logger", "file");
+		if (file == null)
+			return;
+		if (file == "")
+			return;
+		FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
+		fileAppender.setFile(file);
+		fileAppender.setEncoder(ple);
+		fileAppender.setContext(lc);
+		fileAppender.start();
+		root.addAppender(fileAppender);
 	}
 
 	private void patternSetting(LoggerContext lc, PatternLayoutEncoder ple) {
