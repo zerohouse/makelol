@@ -3,6 +3,7 @@ package next.setting;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 
 import next.setting.jobject.JMap;
 
@@ -13,9 +14,9 @@ public class Setting {
 	static JMap node;
 
 	static {
-		String path = JMap.class.getResource("/").getPath();
+		URL path = JMap.class.getResource("/nextSetting.json");
 		try {
-			JsonReader reader = new JsonReader(new FileReader(path + "Setting.json"));
+			JsonReader reader = new JsonReader(new FileReader(path.getFile()));
 			node = new JMap(reader);
 			reader.close();
 		} catch (FileNotFoundException e) {
@@ -29,7 +30,7 @@ public class Setting {
 	public static String getString(String... keys) {
 		return node.get(keys).toString();
 	}
-	
+
 	public static Object get(String... keys) {
 		return node.get(keys);
 	}

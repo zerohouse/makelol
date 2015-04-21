@@ -10,6 +10,8 @@
 	},
 	"database" : {
         "modelPath" : "me.model",
+        "testDataPath" : "me.model.test",
+        "insertDataOnServerStart" : true,
         "connectionPool(boneCp)" : {
 			"jdbcUrl" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
         	"username" : "root",

@@ -17,7 +17,7 @@ public class UserController {
 
 	@Mapping(method = Method.GET)
 	public Response getUser(@Parameter("a") String a, @SessionAttribute("user") User user, Http http, DAO dao) {
-		System.out.println(dao.getRecord("SELECT * FROM User", 1));
+		System.out.println(dao.getRecordByClass(User.class, 1));
 		System.out.println(a);
 		System.out.println(user);
 		return new Json("abc");

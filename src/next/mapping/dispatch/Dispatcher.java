@@ -1,15 +1,25 @@
 package next.mapping.dispatch;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.database.DAO;
+import next.database.annotation.testdata.Insert;
+import next.database.annotation.testdata.InsertList;
+import next.database.annotation.testdata.TestData;
 import next.database.maker.PackageCreator;
 import next.mapping.http.HttpImpl;
 import next.setting.Setting;
+
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
 
 //@MultipartConfig(location = "webapp/uploads", maxFileSize = 1024 * 1024 * 10, fileSizeThreshold = 1024 * 1024, maxRequestSize = 1024 * 1024 * 20)
 public class Dispatcher extends HttpServlet {
@@ -21,6 +31,41 @@ public class Dispatcher extends HttpServlet {
 	public void init() throws ServletException {
 		mapper = new Mapper();
 		databseSetting();
+		InsertTestData();
+	}
+
+	private void InsertTestData() {
+		if (!Boolean.parseBoolean(Setting.getString("database", "insertDataOnServerStart")))
+			return;
+		Reflections ref = new Reflections(Setting.getString("database", "testDataPath"), new SubTypesScanner(), new TypeAnnotationsScanner());
+		ref.getTypesAnnotatedWith(TestData.class).forEach(each -> {
+			DAO dao = new DAO();
+			try {
+				Object obj = each.getConstructor().newInstance();
+				Field[] fields = each.getDeclaredFields();
+				for (int i = 0; i < fields.length; i++) {
+					if (fields[i].isAnnotationPresent(Insert.class)) {
+						fields[i].setAccessible(true);
+						dao.insert(fields[i].get(obj));
+						continue;
+					}
+					if (fields[i].isAnnotationPresent(InsertList.class)) {
+						fields[i].setAccessible(true);
+						List<?> list = (List<?>) fields[i].get(obj);
+						list.forEach(e -> {
+							dao.insert(e);
+						});
+						continue;
+					}
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				dao.close();
+			}
+		});
+
 	}
 
 	private void databseSetting() {
