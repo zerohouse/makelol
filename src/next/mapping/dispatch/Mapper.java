@@ -34,7 +34,7 @@ public class Mapper {
 	private List<MethodHolder> afterList = new ArrayList<MethodHolder>();
 
 	Mapper() {
-		Reflections ref = new Reflections(Setting.get("controllerPath"), new SubTypesScanner(), new TypeAnnotationsScanner());
+		Reflections ref = new Reflections(Setting.getString("controllerPath"), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(Controller.class).forEach(cLass -> {
 			try {
 				makeMethodMap(cLass);

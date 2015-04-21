@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
-public class JArray implements JObject{
+public class JArray implements JObject {
 
 	List<Object> childs = new ArrayList<Object>();
 
@@ -45,7 +45,7 @@ public class JArray implements JObject{
 		List<Object> result = new ArrayList<Object>();
 		List<Object> childNodes = jnode.getChilds();
 		if (!childNodes.isEmpty()) {
-			childNodes.forEach(childNode ->{
+			childNodes.forEach(childNode -> {
 				if (childNode.getClass().equals(JMap.class))
 					result.add(JMap.toMap((JMap) childNode));
 				else if (childNode.getClass().equals(JArray.class))
@@ -66,7 +66,7 @@ public class JArray implements JObject{
 		Gson gson = new Gson();
 		return gson.toJson(toArray(this));
 	}
-	
+
 	@Override
 	public Object get(String key) {
 		return childs.get(Integer.parseInt(key));
@@ -92,8 +92,8 @@ public class JArray implements JObject{
 		}
 		return null;
 	}
-	
-	public void add(Object obj){
+
+	public void add(Object obj) {
 		childs.add(obj);
 	}
 

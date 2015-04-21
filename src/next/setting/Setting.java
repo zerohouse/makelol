@@ -15,7 +15,7 @@ public class Setting {
 	static {
 		String path = JMap.class.getResource("/").getPath();
 		try {
-			JsonReader reader = new JsonReader(new FileReader(path + "../lib.setting"));
+			JsonReader reader = new JsonReader(new FileReader(path + "Setting.json"));
 			node = new JMap(reader);
 			reader.close();
 		} catch (FileNotFoundException e) {
@@ -26,8 +26,12 @@ public class Setting {
 		}
 	}
 
-	public static String get(String... keys) {
+	public static String getString(String... keys) {
 		return node.get(keys).toString();
+	}
+	
+	public static Object get(String... keys) {
+		return node.get(keys);
 	}
 
 }

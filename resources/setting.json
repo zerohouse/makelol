@@ -1,0 +1,57 @@
+{
+	"url":"localhost:8080",
+	"mapping" : ["/api/*", "/user/*"],
+	"controllerPath" : "me.controllers",
+	"jspPath" : "/WEB-INF/jsp/",
+	"logger" : {
+		"level" : "DEBUG",
+		"pattern" : "%date %level [%thread] %logger{10} [%file:%line] %msg%n"
+	},
+	"database" : {
+		"url" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
+        "id" : "root",
+        "password" : "",
+        "modelPath" : "me.model",
+        "createTablesOnServerStart" : true,
+        "resetTablesOnServerStart" : false,
+		"default" : {
+			"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
+			"String" : {
+				"DATATYPE" : "VARCHAR(255)",
+				"NOT NULL" : true,
+				"hasDefaultValue" : true,
+				"DEFAULT" : ""
+			},
+			"Integer" : {
+				"DATATYPE" : "INTEGER",
+				"NOT NULL" : true,
+				"hasDefaultValue" : true,
+				"DEFAULT" : "0"
+			},
+			"Boolean" : {
+				"DATATYPE" : "TINYINT(1)",
+				"NOT NULL" : true,
+				"hasDefaultValue" : true,
+				"DEFAULT" : "0"
+			},
+			"Date" : {
+				"DATATYPE" : "DATETIME",
+				"NOT NULL" : true,
+				"hasDefaultValue" : true,
+				"DEFAULT" : "CURRENT_TIMESTAMP"
+			},
+			"Float" : {
+				"DATATYPE" : "FLOAT",
+				"NOT NULL" : true,
+				"hasDefaultValue" : true,
+				"DEFAULT" : "0"
+			},
+			"Long" : {
+				"DATATYPE" : "BIGINT",
+				"NOT NULL" : true,
+				"hasDefaultValue" : true,
+				"DEFAULT" : "0"
+			}
+		}
+	}
+}

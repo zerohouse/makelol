@@ -26,7 +26,7 @@ public class TableMaker {
 		dao = new DAO();
 		tableClass = tableObj;
 		tableName = tableClass.getSimpleName();
-		table_suffix = Setting.get("database", "default", "table_suffix");
+		table_suffix = Setting.getString("database", "default", "table_suffix");
 		if (!tableClass.isAnnotationPresent(Table.class))
 			return;
 		Table table = tableClass.getAnnotation(Table.class);
@@ -38,7 +38,7 @@ public class TableMaker {
 			table_suffix = table.table_suffix();
 	}
 
-	private static final String CREATE_TABLE = "CREATE TABLE `%s` %s %s";
+	private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `%s` %s %s";
 
 	public void createTable() {
 		String sql = createQuery;

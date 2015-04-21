@@ -39,7 +39,7 @@ public class Jsp implements Response {
 		    http.setAttribute(entry.getKey(), entry.getValue());
 		}
 		try {
-			http.forword(Setting.get("jspPath") + jspFileName);
+			http.forword(Setting.getString("jspPath") + jspFileName);
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 		}

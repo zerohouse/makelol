@@ -16,9 +16,9 @@ public class ConnectionManager {
 
 	private Connection connection;
 
-	private static final String URL = Setting.get("database", "url");
-	private static final String ID = Setting.get("database", "id");
-	private static final String PASSWORD = Setting.get("database", "password");
+	private static final String URL = Setting.getString("database", "url");
+	private static final String ID = Setting.getString("database", "id");
+	private static final String PASSWORD = Setting.getString("database", "password");
 
 	private void connect() {
 		if (connection != null)

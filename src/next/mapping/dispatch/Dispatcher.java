@@ -3,20 +3,22 @@ package next.mapping.dispatch;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import next.database.maker.PackageCreator;
+import next.mapping.http.HttpImpl;
+import next.setting.Setting;
 
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import next.mapping.http.HttpImpl;
-import next.setting.Setting;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 
 //@MultipartConfig(location = "webapp/uploads", maxFileSize = 1024 * 1024 * 10, fileSizeThreshold = 1024 * 1024, maxRequestSize = 1024 * 1024 * 20)
-@WebServlet(loadOnStartup = 1)
 public class Dispatcher extends HttpServlet {
 
 	private static final long serialVersionUID = -2929326068606297558L;
@@ -25,9 +27,35 @@ public class Dispatcher extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		mapper = new Mapper();
+		loggerSetting();
+		databseSetting();
+	}
+
+	private void databseSetting() {
+		boolean create = Boolean.parseBoolean(Setting.getString("database", "createTablesOnServerStart"));
+		boolean reset = Boolean.parseBoolean(Setting.getString("database", "resetTablesOnServerStart"));
+		if (!(create || reset))
+			return;
+		PackageCreator.createTable(reset, Setting.getString("database", "modelPath"));
+	}
+
+	private void loggerSetting() {
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+		PatternLayoutEncoder ple = new PatternLayoutEncoder();
+		patternSetting(lc, ple);
+		levelSetting(root);
+	}
+
+	private void patternSetting(LoggerContext lc, PatternLayoutEncoder ple) {
+		ple.setPattern(Setting.getString("logger", "pattern"));
+		ple.setContext(lc);
+		ple.start();
+	}
+
+	private void levelSetting(Logger root) {
 		Level lv;
-		switch (Setting.get("logLevel")) {
+		switch (Setting.getString("logger", "level")) {
 		case "OFF":
 			lv = Level.OFF;
 			break;
@@ -48,7 +76,7 @@ public class Dispatcher extends HttpServlet {
 			break;
 		}
 		root.setLevel(lv);
-	};
+	}
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
