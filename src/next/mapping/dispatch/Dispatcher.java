@@ -44,10 +44,13 @@ public class Dispatcher extends HttpServlet {
 	private void loggerSetting() {
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+		
 		PatternLayoutEncoder ple = new PatternLayoutEncoder();
-		patternSetting(lc, ple);
 		fileSetting(root, lc, ple);
 		levelSetting(root);
+		ple.setPattern(Setting.getString("logger", "pattern"));
+		ple.setContext(lc);
+		ple.start();
 	}
 
 	private void fileSetting(Logger root, LoggerContext lc, PatternLayoutEncoder ple) {
@@ -62,12 +65,6 @@ public class Dispatcher extends HttpServlet {
 		fileAppender.setContext(lc);
 		fileAppender.start();
 		root.addAppender(fileAppender);
-	}
-
-	private void patternSetting(LoggerContext lc, PatternLayoutEncoder ple) {
-		ple.setPattern(Setting.getString("logger", "pattern"));
-		ple.setContext(lc);
-		ple.start();
 	}
 
 	private void levelSetting(Logger root) {
