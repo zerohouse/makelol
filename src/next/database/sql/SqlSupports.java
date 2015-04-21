@@ -22,7 +22,13 @@ public class SqlSupports {
 	private Map<Field, SqlField> sqlFieldMap;
 	private Map<Class<?>, String> tableNameMap;
 
-	public SqlSupports() {
+	private static SqlSupports sqlSupports = new SqlSupports();
+
+	public static SqlSupports getInstance() {
+		return sqlSupports;
+	}
+	
+	private SqlSupports() {
 		keyParamsMap = new HashMap<Class<?>, KeyParams>();
 		sqlFieldMap = new HashMap<Field, SqlField>();
 		tableNameMap = new HashMap<Class<?>, String>();
@@ -105,6 +111,7 @@ public class SqlSupports {
 		}
 		return true;
 	}
-	
+
+
 
 }

@@ -9,13 +9,18 @@
 		"pattern" : "%level [%thread] %msg - %logger{10} : %file:%line %date%n"
 	},
 	"database" : {
-		"url" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
-        "id" : "root",
-        "password" : "",
         "modelPath" : "me.model",
-        "createTablesOnServerStart" : true,
-        "resetTablesOnServerStart" : false,
-		"default" : {
+        "connectionPool(boneCp)" : {
+			"jdbcUrl" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
+        	"username" : "root",
+        	"password" : "",
+        	"minConnectionsPerPartition" : 5,
+			"maxConnectionsPerPartition" : 10,
+			"setPartitionCount" : 1
+        	},
+		"createOption" : {
+		    "createTablesOnServerStart" : true,
+        	"resetTablesOnServerStart" : false,
 			"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
 			"String" : {
 				"DATATYPE" : "VARCHAR(255)",

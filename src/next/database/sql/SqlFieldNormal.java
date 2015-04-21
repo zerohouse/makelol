@@ -77,13 +77,13 @@ public class SqlFieldNormal implements SqlField {
 	private void setSettings(String type) {
 		defaultValue = "";
 		nullType = "NULL";
-		this.type = Setting.getString("database", "default", type, "DATATYPE");
-		if (!Boolean.parseBoolean(Setting.getString("database", "default", type, "NOT NULL")))
+		this.type = Setting.getString("database", "createOption", type, "DATATYPE");
+		if (!Boolean.parseBoolean(Setting.getString("database", "createOption", type, "NOT NULL")))
 			return;
 		nullType = "NOT " + nullType;
-		if (!Boolean.parseBoolean(Setting.getString("database", "default", type, "hasDefaultValue")))
+		if (!Boolean.parseBoolean(Setting.getString("database", "createOption", type, "hasDefaultValue")))
 			return;
-		String defaultvalue = Setting.getString("database", "default", type, "DEFAULT");
+		String defaultvalue = Setting.getString("database", "createOption", type, "DEFAULT");
 		if (type.equals("String") && defaultvalue.equals(""))
 			defaultvalue = "''";
 		defaultValue += "DEFAULT " + defaultvalue;

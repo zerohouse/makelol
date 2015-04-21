@@ -26,6 +26,16 @@ public class HttpImpl implements Http {
 	}
 
 	@Override
+	public HttpServletRequest getReq() {
+		return req;
+	}
+
+	@Override
+	public HttpServletResponse getResp() {
+		return resp;
+	}
+
+	@Override
 	public <T> T getJsonObject(Class<T> cLass, String name) {
 		Gson gson = DateBuilder.getGsonBuilder(cLass);
 		try {

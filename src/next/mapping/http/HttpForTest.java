@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
@@ -170,6 +172,16 @@ public class HttpForTest implements Http {
 
 	@Override
 	public Collection<Part> getParts() {
+		return null;
+	}
+
+	@Override
+	public HttpServletRequest getReq() {
+		return null;
+	}
+
+	@Override
+	public HttpServletResponse getResp() {
 		return null;
 	}
 

@@ -21,18 +21,16 @@ public class DAO {
 
 	private static final Logger logger = LoggerUtil.getLogger(DAO.class);
 
-	private ConnectionManager conn;
+	private ConnectManager conn;
+	
+	private SqlSupports sqlSupports = SqlSupports.getInstance();
 
-	private SqlSupports sqlSupports;
-
-	public DAO(ConnectionManager conn, SqlSupports sqlSupports) {
+	public DAO(ConnectManager conn) {
 		this.conn = conn;
-		this.sqlSupports = sqlSupports;
 	}
 
 	public DAO() {
-		conn = new ConnectionManager();
-		sqlSupports = new SqlSupports();
+		conn = new AutoCommit();
 	}
 
 	public List<Object> getRecord(String sql, int resultSize, Object... parameters) {
@@ -221,18 +219,10 @@ public class DAO {
 			}
 	}
 
-	public void commitAndClose() {
-		commit();
-		close();
-	}
-
 	public void close() {
 		conn.close();
 	}
 
-	public void commit() {
-		conn.commit();
-	}
 
 	private final static String INSERT = "INSERT %s SET %s";
 

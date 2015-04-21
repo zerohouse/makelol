@@ -26,7 +26,7 @@ public class DispatcherListener implements ServletContextListener {
 		}
 
 		if (mapping.getClass().equals(JArray.class)) {
-			List<Object> array = JArray.toArray(((JArray) mapping));
+			List<Object> array = ((JArray) mapping).getChilds();
 			array.forEach(each -> {
 				dispatcher.addMapping(each.toString());
 			});

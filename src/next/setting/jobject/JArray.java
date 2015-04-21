@@ -20,7 +20,7 @@ public class JArray implements JObject {
 			if (peek == JsonToken.STRING)
 				childs.add(reader.nextString());
 			else if (peek == JsonToken.NUMBER)
-				childs.add(reader.nextDouble());
+				childs.add(reader.nextInt());
 			else if (peek == JsonToken.BOOLEAN)
 				childs.add(reader.nextBoolean());
 			else if (peek == JsonToken.NULL) {
@@ -57,7 +57,7 @@ public class JArray implements JObject {
 		return result;
 	}
 
-	private List<Object> getChilds() {
+	public List<Object> getChilds() {
 		return childs;
 	}
 

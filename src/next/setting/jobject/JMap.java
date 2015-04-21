@@ -22,7 +22,7 @@ public class JMap implements JObject{
 				if (peek == JsonToken.STRING)
 					childs.put(key, reader.nextString());
 				else if (peek == JsonToken.NUMBER)
-					childs.put(key, reader.nextDouble());
+					childs.put(key, reader.nextInt());
 				else if (peek == JsonToken.BOOLEAN)
 					childs.put(key, reader.nextBoolean());
 				else if (peek == JsonToken.NULL) {
@@ -66,7 +66,7 @@ public class JMap implements JObject{
 		return gson.toJson(toMap(this));
 	}
 
-	private Map<Object, Object> getChilds() {
+	public Map<Object, Object> getChilds() {
 		return childs;
 	}
 

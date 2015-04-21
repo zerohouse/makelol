@@ -1,37 +1,26 @@
 package next.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import next.setting.LoggerUtil;
-import next.setting.Setting;
 
 import org.slf4j.Logger;
 
-public class ConnectionManager {
+public class TransactionSupport implements ConnectManager {
 
-	private static final Logger logger = LoggerUtil.getLogger(ConnectionManager.class);
+	private static final Logger logger = LoggerUtil.getLogger(ConnectManager.class);
 
 	private Connection connection;
-
-	private static final String URL = Setting.getString("database", "url");
-	private static final String ID = Setting.getString("database", "id");
-	private static final String PASSWORD = Setting.getString("database", "password");
 
 	private void connect() {
 		if (connection != null)
 			return;
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(URL, ID, PASSWORD);
-			connection.setAutoCommit(false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		connection = ConnectionPool.getConnection(false);
 	}
 
+	@Override
 	public PreparedStatement getPSTMT(String sql, Object[] parameters) {
 		connect();
 		PreparedStatement pstmt = null;
@@ -48,7 +37,9 @@ public class ConnectionManager {
 		return pstmt;
 	}
 
+	@Override
 	public void close() {
+		commit();
 		if (connection == null)
 			return;
 		try {
@@ -58,7 +49,7 @@ public class ConnectionManager {
 		}
 	}
 
-	public void commit() {
+	private void commit() {
 		connect();
 		try {
 			connection.commit();

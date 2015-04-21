@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import next.database.ConnectionManager;
 import next.database.DAO;
-import next.database.sql.SqlSupports;
+import next.database.TransactionSupport;
 import next.mapping.annotation.After;
 import next.mapping.annotation.Before;
 import next.mapping.annotation.Controller;
 import next.mapping.annotation.HttpMethod;
 import next.mapping.annotation.Mapping;
 import next.mapping.http.Http;
+import next.mapping.response.Json;
 import next.mapping.response.Response;
 import next.setting.LoggerUtil;
 import next.setting.Setting;
@@ -35,14 +35,12 @@ public class Mapper {
 	private List<MethodHolder> beforeList;
 	private List<MethodHolder> afterList;
 
-	private SqlSupports sqlSupport;
 
 	Mapper() {
 		methodMap = new HashMap<UriKey, MethodHolder>();
 		uriMap = new UriMap();
 		beforeList = new ArrayList<MethodHolder>();
 		afterList = new ArrayList<MethodHolder>();
-		sqlSupport = new SqlSupports();
 		Reflections ref = new Reflections(Setting.getString("controllerPath"), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(Controller.class).forEach(cLass -> {
 			try {
@@ -62,7 +60,7 @@ public class Mapper {
 			http.sendError(404);
 			return;
 		}
-		DAO dao = new DAO(new ConnectionManager(), sqlSupport);
+		DAO dao = new DAO(new TransactionSupport());
 
 		Queue<MethodHolder> todo = new LinkedList<MethodHolder>();
 
@@ -74,12 +72,15 @@ public class Mapper {
 
 		while (!todo.isEmpty()) {
 			MethodHolder mh = todo.poll();
-			Response returned = mh.execute(http, dao);
-			if (returned != null) {
-				dao.commitAndClose();
-				returned.render(http);
-				break;
-			}
+			Object returned = mh.execute(http, dao);
+			if (returned == null)
+				continue;
+			dao.close();
+			if (returned.getClass().getInterfaces()[0].equals(Response.class))
+				((Response) returned).render(http);
+			else
+				new Json(returned).render(http);
+			break;
 		}
 	}
 
@@ -107,7 +108,6 @@ public class Mapper {
 				afterList.add(new MethodHolder(instance, methods[i]));
 			}
 		}
-
 	}
 
 	private void makeUriMap(Class<?> eachClass) {
@@ -146,5 +146,6 @@ public class Mapper {
 			methodList.add(methodMap.get(new UriKey(UriKey.METHOD, stringArray[j])));
 		}
 	}
+
 
 }

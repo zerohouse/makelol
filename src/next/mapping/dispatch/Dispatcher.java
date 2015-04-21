@@ -24,8 +24,8 @@ public class Dispatcher extends HttpServlet {
 	}
 
 	private void databseSetting() {
-		boolean create = Boolean.parseBoolean(Setting.getString("database", "createTablesOnServerStart"));
-		boolean reset = Boolean.parseBoolean(Setting.getString("database", "resetTablesOnServerStart"));
+		boolean create = Boolean.parseBoolean(Setting.getString("database", "createOption", "createTablesOnServerStart"));
+		boolean reset = Boolean.parseBoolean(Setting.getString("database", "createOption", "resetTablesOnServerStart"));
 		if (!(create || reset))
 			return;
 		PackageCreator.createTable(reset, Setting.getString("database", "modelPath"));
