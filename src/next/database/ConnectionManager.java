@@ -5,14 +5,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import next.setting.LoggerUtil;
 import next.setting.Setting;
+
+import org.slf4j.Logger;
 
 public class ConnectionManager {
 
-	private static final Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
+	private static final Logger logger = LoggerUtil.getLogger(ConnectionManager.class);
 
 	private Connection connection;
 

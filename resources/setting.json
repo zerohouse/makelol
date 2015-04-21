@@ -4,9 +4,9 @@
 	"controllerPath" : "me.controllers",
 	"jspPath" : "/WEB-INF/jsp/",
 	"logger" : {
-		"level" : "DEBUG",
-		"file" : "/log.log",
-		"pattern" : "%msg%n"
+		"level" : "ALL",
+		"logPath" : "/log/",
+		"pattern" : "%level [%thread] %msg - %logger{10} : %file:%line %date%n"
 	},
 	"database" : {
 		"url" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",

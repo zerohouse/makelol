@@ -17,17 +17,17 @@ import next.mapping.annotation.HttpMethod;
 import next.mapping.annotation.Mapping;
 import next.mapping.http.Http;
 import next.mapping.response.Response;
+import next.setting.LoggerUtil;
 import next.setting.Setting;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Mapper {
 
-	private static final Logger logger = LoggerFactory.getLogger(Mapper.class);
+	private static final Logger logger = LoggerUtil.getLogger(Mapper.class);
 	private Map<UriKey, MethodHolder> methodMap = new HashMap<UriKey, MethodHolder>();
 	private UriMap uriMap = new UriMap();
 	private List<MethodHolder> beforeList = new ArrayList<MethodHolder>();

@@ -10,15 +10,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+
 import next.database.sql.KeyParams;
 import next.database.sql.NullableParams;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import next.setting.LoggerUtil;
 
 public class DAO {
 
-	private static final Logger logger = LoggerFactory.getLogger(DAO.class);
+	private static final Logger logger = LoggerUtil.getLogger(DAO.class);
 
 	private ConnectionManager conn;
 
