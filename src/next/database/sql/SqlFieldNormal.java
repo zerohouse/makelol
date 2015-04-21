@@ -2,21 +2,36 @@ package next.database.sql;
 
 import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import next.database.annotation.Column;
 import next.database.annotation.Key;
+import next.database.annotation.RequiredRegex;
 import next.setting.Setting;
 
 public class SqlFieldNormal implements SqlField {
 
-	SqlFieldNormal(Field field) {
-		SqlTable table = SqlTable.getInstance(field.getDeclaringClass());
-		this.tableName = table.getTableName();
+	SqlFieldNormal(String tableName, Field field) {
+		this.tableName = tableName;
 		this.field = field;
 		setCondition();
 		setFieldString();
+		if (!field.isAnnotationPresent(RequiredRegex.class))
+			return;
+		String regex = field.getAnnotation(RequiredRegex.class).value();
+		pattern = Pattern.compile(regex);
 	}
 
+	public boolean check(Object param) {
+		if (pattern == null)
+			return true;
+		if (pattern.matcher(param.toString()).matches()) {
+			return true;
+		}
+		return false;
+	}
+
+	private Pattern pattern;
 	private String tableName;
 	private Field field;
 	private String columnName;

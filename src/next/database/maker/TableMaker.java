@@ -4,14 +4,15 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import next.database.ConnectionManager;
 import next.database.DAO;
 import next.database.annotation.Column;
 import next.database.annotation.Exclude;
 import next.database.annotation.Key;
 import next.database.annotation.OtherTable;
 import next.database.annotation.Table;
-import next.database.sql.SqlField;
 import next.database.sql.SqlFieldNormal;
+import next.database.sql.SqlSupports;
 import next.setting.Setting;
 
 public class TableMaker {
@@ -21,9 +22,11 @@ public class TableMaker {
 	private String tableName;
 	private String table_suffix;
 	private String createQuery;
+	private SqlSupports sqlSupports;
 
 	public TableMaker(Class<?> tableObj) {
-		dao = new DAO();
+		sqlSupports = new SqlSupports();
+		dao = new DAO(new ConnectionManager(), sqlSupports);
 		tableClass = tableObj;
 		tableName = tableClass.getSimpleName();
 		table_suffix = Setting.getString("database", "default", "table_suffix");
@@ -71,7 +74,7 @@ public class TableMaker {
 				continue;
 			if (fields[i].isAnnotationPresent(Exclude.class))
 				continue;
-			SqlFieldNormal fm = (SqlFieldNormal) SqlField.getInstance(fields[i]);
+			SqlFieldNormal fm = (SqlFieldNormal) sqlSupports.getSqlField(fields[i]);
 			result += fm.getFieldString() + ", ";
 			if (fields[i].isAnnotationPresent(Key.class)) {
 				addFunction(fm, PRIMARY_KEY);

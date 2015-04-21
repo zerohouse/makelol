@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import next.database.ConnectionManager;
 import next.database.DAO;
+import next.database.sql.SqlSupports;
 import next.mapping.annotation.After;
 import next.mapping.annotation.Before;
 import next.mapping.annotation.Controller;
@@ -28,12 +30,19 @@ import org.slf4j.Logger;
 public class Mapper {
 
 	private static final Logger logger = LoggerUtil.getLogger(Mapper.class);
-	private Map<UriKey, MethodHolder> methodMap = new HashMap<UriKey, MethodHolder>();
-	private UriMap uriMap = new UriMap();
-	private List<MethodHolder> beforeList = new ArrayList<MethodHolder>();
-	private List<MethodHolder> afterList = new ArrayList<MethodHolder>();
+	private Map<UriKey, MethodHolder> methodMap;
+	private UriMap uriMap;
+	private List<MethodHolder> beforeList;
+	private List<MethodHolder> afterList;
+
+	private SqlSupports sqlSupport;
 
 	Mapper() {
+		methodMap = new HashMap<UriKey, MethodHolder>();
+		uriMap = new UriMap();
+		beforeList = new ArrayList<MethodHolder>();
+		afterList = new ArrayList<MethodHolder>();
+		sqlSupport = new SqlSupports();
 		Reflections ref = new Reflections(Setting.getString("controllerPath"), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(Controller.class).forEach(cLass -> {
 			try {
@@ -53,7 +62,7 @@ public class Mapper {
 			http.sendError(404);
 			return;
 		}
-		DAO dao = new DAO();
+		DAO dao = new DAO(new ConnectionManager(), sqlSupport);
 
 		Queue<MethodHolder> todo = new LinkedList<MethodHolder>();
 

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 import next.database.sql.KeyParams;
 import next.database.sql.NullableParams;
+import next.database.sql.SqlSupports;
 import next.setting.LoggerUtil;
 
 public class DAO {
@@ -22,8 +23,16 @@ public class DAO {
 
 	private ConnectionManager conn;
 
+	private SqlSupports sqlSupports;
+
+	public DAO(ConnectionManager conn, SqlSupports sqlSupports) {
+		this.conn = conn;
+		this.sqlSupports = sqlSupports;
+	}
+
 	public DAO() {
 		conn = new ConnectionManager();
+		sqlSupports = new SqlSupports();
 	}
 
 	public List<Object> getRecord(String sql, int resultSize, Object... parameters) {
@@ -132,7 +141,7 @@ public class DAO {
 
 	public <T> T getRecord(Class<T> cLass, String sql, Object... parameters) {
 		Map<String, Object> record = getRecordMap(sql, parameters);
-		T result = Parser.getObject(cLass, record);
+		T result = sqlSupports.getObject(cLass, record);
 		return result;
 	}
 
@@ -141,17 +150,17 @@ public class DAO {
 	public static final String comma = ", ";
 
 	public boolean fill(Object record) {
-		KeyParams kp = new NullableParams(record);
+		KeyParams kp = new NullableParams(sqlSupports, record);
 		Map<String, Object> recordMap = getRecordMap(String.format("SELECT * FROM %s WHERE %s", kp.getTableName(), kp.getKeyFieldNames(EQ, and)), kp
 				.getKeyParams().toArray());
-		return Parser.setObject(record, recordMap);
+		return sqlSupports.setObject(record, recordMap);
 	}
 
 	public <T> T getRecordByClass(Class<T> cLass, Object... parameters) {
-		KeyParams sp = KeyParams.getInstance(cLass);
+		KeyParams sp = sqlSupports.getKeyParams(cLass);
 		Map<String, Object> record = getRecordMap(String.format("SELECT * FROM %s WHERE %s", sp.getTableName(), sp.getKeyFieldNames(EQ, and)),
 				parameters);
-		T result = Parser.getObject(cLass, record);
+		T result = sqlSupports.getObject(cLass, record);
 		return result;
 	}
 
@@ -161,7 +170,7 @@ public class DAO {
 		if (records == null)
 			return null;
 		records.forEach(record -> {
-			result.add(Parser.getObject(cLass, record));
+			result.add(sqlSupports.getObject(cLass, record));
 		});
 		return result;
 	}
@@ -172,13 +181,13 @@ public class DAO {
 			return null;
 		List<T> result = new ArrayList<T>();
 		records.forEach(record -> {
-			result.add(Parser.getObject(cLass, record));
+			result.add(sqlSupports.getObject(cLass, record));
 		});
 		return result;
 	}
 
 	public <T> List<T> getRecordsByClass(Class<T> cLass) {
-		return getRecordsByClass(cLass, String.format("SELECT * FROM %s", KeyParams.getInstance(cLass).getTableName()));
+		return getRecordsByClass(cLass, String.format("SELECT * FROM %s", sqlSupports.getKeyParams(cLass).getTableName()));
 	}
 
 	public Boolean execute(String sql, Object... parameters) {
@@ -228,7 +237,7 @@ public class DAO {
 	private final static String INSERT = "INSERT %s SET %s";
 
 	public boolean insert(Object record) {
-		KeyParams sap = new KeyParams(record);
+		KeyParams sap = sqlSupports.getKeyParams(record);
 		if (sap.isEmpty())
 			return false;
 		String fieldsNames = sap.getIntegratedFieldNames(EQ, comma);
@@ -239,7 +248,7 @@ public class DAO {
 	private final static String INSERT_IFEXISTS_UPDATE = "INSERT INTO %s (%s) VALUES (%s) ON DUPLICATE KEY UPDATE %s";
 
 	public boolean insertIfExistUpdate(Object record) {
-		KeyParams sap = new KeyParams(record);
+		KeyParams sap = sqlSupports.getKeyParams(record);
 		if (sap.isEmpty())
 			return false;
 		String fieldsNames = sap.getFieldNames("", comma) + comma + sap.getKeyFieldNames("", comma);
@@ -261,7 +270,7 @@ public class DAO {
 	private final static String UPDATE = "UPDATE %s SET %s WHERE %s";
 
 	public boolean update(Object record) {
-		KeyParams sap = new KeyParams(record);
+		KeyParams sap = sqlSupports.getKeyParams(record);
 		if (!sap.hasKeyParams())
 			return false;
 		if (!sap.hasParams())
@@ -276,7 +285,7 @@ public class DAO {
 	private final static String DELETE = "DELETE FROM %s WHERE %s";
 
 	public boolean delete(Object record) {
-		KeyParams sap = new KeyParams(record);
+		KeyParams sap = sqlSupports.getKeyParams(record);
 		if (!sap.hasKeyParams())
 			return false;
 		return execute(String.format(DELETE, sap.getTableName(), sap.getKeyFieldNames(EQ, and)), sap.getKeyParams().toArray());
