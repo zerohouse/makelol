@@ -121,7 +121,7 @@ public class DAO {
 		return result;
 	}
 
-	public List<Map<String, Object>> getRecordsMap(String sql, Object... parameters) {
+	public List<Map<String, Object>> getRecordMaps(String sql, Object... parameters) {
 		List<Map<String, Object>> result = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -149,24 +149,13 @@ public class DAO {
 		return result;
 	}
 
-	public <T> T getRecord(Class<T> cLass, String sql, Object... parameters) {
+	public <T> T getObject(String sql, Class<T> cLass, Object... parameters) {
 		Map<String, Object> record = getRecordMap(sql, parameters);
 		T result = sqlSupports.getObject(cLass, record);
 		return result;
 	}
 
-	public static final String EQ = "=?";
-	public static final String and = " and ";
-	public static final String comma = ", ";
-
-	public boolean fill(Object record) {
-		KeyParams kp = new NullableParams(sqlSupports, record);
-		Map<String, Object> recordMap = getRecordMap(String.format("SELECT * FROM %s WHERE %s", kp.getTableName(), kp.getKeyFieldNames(EQ, and)), kp
-				.getKeyParams().toArray());
-		return sqlSupports.setObject(record, recordMap);
-	}
-
-	public <T> T getRecordByClass(Class<T> cLass, Object... parameters) {
+	public <T> T getObject(Class<T> cLass, Object... parameters) {
 		KeyParams sp = sqlSupports.getKeyParams(cLass);
 		Map<String, Object> record = getRecordMap(String.format("SELECT * FROM %s WHERE %s", sp.getTableName(), sp.getKeyFieldNames(EQ, and)),
 				parameters);
@@ -174,8 +163,8 @@ public class DAO {
 		return result;
 	}
 
-	public <T> List<T> getRecords(Class<T> cLass, String sql, Object... parameters) {
-		List<Map<String, Object>> records = getRecordsMap(sql, parameters);
+	public <T> List<T> getObjects(String sql, Class<T> cLass, Object... parameters) {
+		List<Map<String, Object>> records = getRecordMaps(sql, parameters);
 		List<T> result = new ArrayList<T>();
 		if (records == null)
 			return null;
@@ -185,19 +174,8 @@ public class DAO {
 		return result;
 	}
 
-	public <T> List<T> getRecordsByClass(Class<T> cLass, String sql, Object... parameters) {
-		List<Map<String, Object>> records = getRecordsMap(sql, parameters);
-		if (records == null)
-			return null;
-		List<T> result = new ArrayList<T>();
-		records.forEach(record -> {
-			result.add(sqlSupports.getObject(cLass, record));
-		});
-		return result;
-	}
-
-	public <T> List<T> getRecordsByClass(Class<T> cLass) {
-		return getRecordsByClass(cLass, String.format("SELECT * FROM %s", sqlSupports.getKeyParams(cLass).getTableName()));
+	public <T> List<T> getObjects(Class<T> cLass) {
+		return getObjects(String.format("SELECT * FROM %s", sqlSupports.getKeyParams(cLass).getTableName()), cLass);
 	}
 
 	public Boolean execute(String sql, Object... parameters) {
@@ -248,6 +226,17 @@ public class DAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static final String EQ = "=?";
+	public static final String and = " and ";
+	public static final String comma = ", ";
+
+	public boolean fill(Object record) {
+		KeyParams kp = new NullableParams(sqlSupports, record);
+		Map<String, Object> recordMap = getRecordMap(String.format("SELECT * FROM %s WHERE %s", kp.getTableName(), kp.getKeyFieldNames(EQ, and)), kp
+				.getKeyParams().toArray());
+		return sqlSupports.setObject(record, recordMap);
 	}
 
 	private final static String INSERT = "INSERT %s SET %s";
@@ -310,7 +299,7 @@ public class DAO {
 	private final static String LAST = "SELECT LAST_INSERT_ID();";
 
 	public BigInteger getLastKey() {
-		return (BigInteger) getRecord(LAST, 1).get(0);
+		return (BigInteger) getRecordMap(LAST, 1).get(0);
 	}
 
 }
