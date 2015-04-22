@@ -1,4 +1,4 @@
-package next.setting.strict;
+package next.setting;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
