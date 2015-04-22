@@ -35,7 +35,7 @@ public class SqlSupports {
 		sqlFieldMap = new HashMap<Field, SqlField>();
 		tableNameMap = new HashMap<Class<?>, String>();
 
-		Reflections ref = new Reflections(Setting.getString("database", "modelPackage"), new SubTypesScanner(), new TypeAnnotationsScanner());
+		Reflections ref = new Reflections(Setting.get().getDatabase().getModelPackage(), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(Table.class).forEach(cLass -> {
 
 			String tableName = cLass.getSimpleName();
@@ -98,7 +98,7 @@ public class SqlSupports {
 			}
 		Object obj = null;
 		for (int i = 0; i < paramTypes.length; i++) {
-			//obj = check(paramTypes[i]);
+			// obj = check(paramTypes[i]);
 			params.add(obj);
 		}
 		try {

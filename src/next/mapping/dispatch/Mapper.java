@@ -19,8 +19,8 @@ import next.mapping.annotation.Mapping;
 import next.mapping.http.Http;
 import next.mapping.response.Json;
 import next.mapping.response.Response;
-import next.setting.LoggerUtil;
 import next.setting.Setting;
+import next.util.LoggerUtil;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -34,7 +34,7 @@ public class Mapper {
 	private UriMap uriMap;
 	private List<MethodHolder> beforeList;
 	private List<MethodHolder> afterList;
-	private static final String controllerPath = Setting.getString("mapping", "controllerPackage");
+	private static final String controllerPath = Setting.get().getMapping().getControllerPackage();
 
 	Mapper() {
 		methodMap = new HashMap<UriKey, MethodHolder>();

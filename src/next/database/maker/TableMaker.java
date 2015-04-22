@@ -26,7 +26,7 @@ public class TableMaker {
 		tableClass = tableObj;
 		this.dao = dao;
 		tableName = tableClass.getSimpleName();
-		table_suffix = Setting.getString("database", "createOption", "table_suffix");
+		table_suffix = Setting.get().getDatabase().getCreateOption().getTable_suffix();
 		if (!tableClass.isAnnotationPresent(Table.class))
 			return;
 		Table table = tableClass.getAnnotation(Table.class);

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import next.setting.LoggerUtil;
+import next.util.LoggerUtil;
 
 import org.slf4j.Logger;
 

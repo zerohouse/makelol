@@ -13,7 +13,7 @@ public class Jsp implements Response {
 
 	private String jspFileName;
 
-	private static final String PATH = Setting.getString("mapping", "jspPath");
+	private static final String PATH = Setting.get().getMapping().getJspPath();
 
 	private Map<String, Object> variables = new HashMap<String, Object>();
 

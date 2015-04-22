@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import next.database.sql.KeyParams;
 import next.database.sql.NullableParams;
 import next.database.sql.SqlSupports;
-import next.setting.LoggerUtil;
+import next.util.LoggerUtil;
 
 public class DAO {
 

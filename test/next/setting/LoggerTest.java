@@ -1,6 +1,8 @@
 package next.setting;
 
 
+import next.util.LoggerUtil;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 

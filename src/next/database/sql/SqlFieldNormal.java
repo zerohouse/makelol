@@ -7,7 +7,9 @@ import java.util.regex.Pattern;
 import next.database.annotation.Column;
 import next.database.annotation.Key;
 import next.database.annotation.RequiredRegex;
+import next.setting.CreateOption;
 import next.setting.Setting;
+import next.setting.TableOptions;
 
 public class SqlFieldNormal implements SqlField {
 
@@ -55,18 +57,19 @@ public class SqlFieldNormal implements SqlField {
 
 	private void setCondition() {
 		Class<?> t = field.getType();
+		CreateOption options = Setting.get().getDatabase().getCreateOption();
 		if (t.equals(Integer.class) || t.equals(int.class)) {
-			setSettings("Integer");
+			setSettings(options.getIntegerOptions());
 		} else if (t.equals(String.class)) {
-			setSettings("String");
+			setSettings(options.getStringOptions());
 		} else if (t.equals(Date.class)) {
-			setSettings("Date");
+			setSettings(options.getDateOptions());
 		} else if (t.equals(long.class) || t.equals(Long.class)) {
-			setSettings("Float");
+			setSettings(options.getLongOptions());
 		} else if (t.equals(float.class) || t.equals(Float.class)) {
-			setSettings("Long");
+			setSettings(options.getFloatOptions());
 		} else if (t.equals(boolean.class) || t.equals(Boolean.class)) {
-			setSettings("Boolean");
+			setSettings(options.getBooleanOptions());
 		}
 	}
 
@@ -74,16 +77,16 @@ public class SqlFieldNormal implements SqlField {
 	private String nullType;
 	private String type;
 
-	private void setSettings(String type) {
+	private void setSettings(TableOptions options) {
 		defaultValue = "";
 		nullType = "NULL";
-		this.type = Setting.getString("database", "createOption", type, "DATATYPE");
-		if (!Boolean.parseBoolean(Setting.getString("database", "createOption", type, "NOT NULL")))
+		this.type = options.getDatatype(); 
+		if (!options.getNotnull())
 			return;
 		nullType = "NOT " + nullType;
-		if (!Boolean.parseBoolean(Setting.getString("database", "createOption", type, "hasDefaultValue")))
+		if (!options.getHasDefaultValue())
 			return;
-		String defaultvalue = Setting.getString("database", "createOption", type, "DEFAULT");
+		String defaultvalue = options.getDefaultValue().toString();
 		if (type.equals("String") && defaultvalue.equals(""))
 			defaultvalue = "''";
 		defaultValue += "DEFAULT " + defaultvalue;

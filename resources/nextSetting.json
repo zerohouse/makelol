@@ -1,6 +1,6 @@
 {
 	"mapping" : {
-		"mapping" : ["/api/*", "/user/*"],
+		"mappings" : ["/api/*", "/user/*"],
 		"characterEncoding" : "UTF-8",
 		"url":"localhost:8080",
 		"controllerPackage" : "me.controllers",
@@ -8,14 +8,13 @@
 	},
 	"logger" : {
 		"level" : "ALL",
-		"logPath" : "/log/",
+		"logFilePath" : "/log/",
 		"pattern" : "%level [%thread] %msg - %logger{10} : %file:%line %date%n"
 	},
 	"database" : {
         "modelPackage" : "me.model",
         "testDataPackage" : "me.model.test",
-        "insertDataOnServerStart" : true,
-        "connectionPool(boneCp)" : {
+        "connectionSetting" : {
 			"jdbcUrl" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
         	"username" : "root",
         	"password" : "",
@@ -26,38 +25,39 @@
 		"createOption" : {
 		    "createTablesOnServerStart" : true,
         	"resetTablesOnServerStart" : false,
+        	"insertDataOnServerStart" : true,
 			"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
-			"String" : {
+			"stringOptions" : {
 				"DATATYPE" : "VARCHAR(255)",
 				"NOT NULL" : true,
 				"hasDefaultValue" : true,
 				"DEFAULT" : ""
 			},
-			"Integer" : {
+			"integerOptions" : {
 				"DATATYPE" : "INTEGER",
 				"NOT NULL" : true,
 				"hasDefaultValue" : true,
 				"DEFAULT" : "0"
 			},
-			"Boolean" : {
+			"booleanOptions" : {
 				"DATATYPE" : "TINYINT(1)",
 				"NOT NULL" : true,
 				"hasDefaultValue" : true,
 				"DEFAULT" : "0"
 			},
-			"Date" : {
+			"dateOptions" : {
 				"DATATYPE" : "DATETIME",
 				"NOT NULL" : true,
 				"hasDefaultValue" : true,
 				"DEFAULT" : "CURRENT_TIMESTAMP"
 			},
-			"Float" : {
+			"floatOptions" : {
 				"DATATYPE" : "FLOAT",
 				"NOT NULL" : true,
 				"hasDefaultValue" : true,
 				"DEFAULT" : "0"
 			},
-			"Long" : {
+			"longOptions" : {
 				"DATATYPE" : "BIGINT",
 				"NOT NULL" : true,
 				"hasDefaultValue" : true,

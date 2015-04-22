@@ -31,7 +31,7 @@ public class Dispatcher extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Http http = new HttpImpl(req, resp);
-		String encording = Setting.getString("mapping", "characterEncoding");
+		String encording = Setting.get().getMapping().getCharacterEncoding();
 		if (encording != null && !"".equals(encording))
 			http.setCharacterEncoding(encording);
 		mapper.execute(new UriKey(req.getMethod(), req.getRequestURI()), http);
@@ -45,9 +45,9 @@ public class Dispatcher extends HttpServlet {
 	}
 
 	private void InsertTestData() {
-		if (!Boolean.parseBoolean(Setting.getString("database", "insertDataOnServerStart")))
+		if (!Setting.get().getDatabase().getCreateOption().getInsertDataOnServerStart())
 			return;
-		Reflections ref = new Reflections(Setting.getString("database", "testDataPackage"), new SubTypesScanner(), new TypeAnnotationsScanner());
+		Reflections ref = new Reflections(Setting.get().getDatabase().getTestDataPackage(), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(TestData.class).forEach(each -> {
 			DAO dao = new DAO();
 			try {
@@ -79,11 +79,12 @@ public class Dispatcher extends HttpServlet {
 	}
 
 	private void databseSetting() {
-		boolean create = Boolean.parseBoolean(Setting.getString("database", "createOption", "createTablesOnServerStart"));
-		boolean reset = Boolean.parseBoolean(Setting.getString("database", "createOption", "resetTablesOnServerStart"));
+		boolean create = Setting.get().getDatabase().getCreateOption().getCreateTablesOnServerStart();
+		boolean reset = Setting.get().getDatabase().getCreateOption().getResetTablesOnServerStart();
 		if (!(create || reset))
 			return;
-		PackageCreator.createTable(reset, Setting.getString("database", "modelPackage"));
+
+		PackageCreator.createTable(reset, Setting.get().getDatabase().getModelPackage());
 	}
 
 }

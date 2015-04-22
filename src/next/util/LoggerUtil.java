@@ -1,4 +1,6 @@
-package next.setting;
+package next.util;
+
+import next.setting.Setting;
 
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +17,7 @@ public class LoggerUtil {
 	private static Level lv;
 
 	static {
-		switch (Setting.getString("logger", "level")) {
+		switch (Setting.get().getLogger().getLevel()) {
 		case "OFF":
 			lv = Level.OFF;
 			break;
@@ -41,13 +43,13 @@ public class LoggerUtil {
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		PatternLayoutEncoder ple = new PatternLayoutEncoder();
 
-		ple.setPattern(Setting.getString("logger", "pattern"));
+		ple.setPattern(Setting.get().getLogger().getPattern());
 		ple.setContext(lc);
 		ple.start();
 		FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
 
 		String name = cLass.getSimpleName();
-		fileAppender.setFile(Setting.getString("logger", "logPath") + "/" + name + ".log");
+		fileAppender.setFile(Setting.get().getLogger().getLogFilePath() + "/" + name + ".log");
 		fileAppender.setEncoder(ple);
 		fileAppender.setContext(lc);
 		fileAppender.start();
