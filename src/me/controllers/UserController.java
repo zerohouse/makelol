@@ -1,31 +1,40 @@
 package me.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+
 import me.model.User;
 import next.database.DAO;
-import next.mapping.annotation.Before;
 import next.mapping.annotation.Controller;
+import next.mapping.annotation.HttpMethod;
 import next.mapping.annotation.Mapping;
 import next.mapping.annotation.parameters.Parameter;
+import next.mapping.annotation.parameters.SessionAttribute;
 import next.mapping.constant.Method;
-import next.mapping.http.Http;
 import next.mapping.response.Json;
 import next.mapping.response.Response;
+import next.mapping.response.support.Result;
 
 @Controller
 @Mapping("/api/user")
 public class UserController {
 
-	@Mapping(method = Method.GET)
-	public Response getUser(@Parameter("a") String a, Http http, DAO dao) {
-		System.out.println(dao.getRecordByClass(User.class, 1));
-		System.out.println(a);
+	@Mapping(value = "", before = { "" }, after = { "" }, method = Method.GET)
+	public Response getUser(@Parameter("userId") String userId, @SessionAttribute("user") User user) {
+		DAO dao = new DAO();
+		dao.insert(user);
+		dao.update(user);
+		dao.delete(user);
+		dao.insertIfExistUpdate(user);
+		dao.fill(user);
 		return new Json("abc");
 	}
 
 	@Mapping(value = "/user", method = Method.GET)
-	public String getsUser(Http http, DAO dao) {
-		System.out.println(dao.getRecord("SELECT * FROM User", 1));
-		return "abc";
+	@HttpMethod(value = "loginCheck")
+	public Result loginCheck(HttpServletRequest req) {
+		if (req.getSession().getAttribute("user") == null)
+			return new Result("로그인이 필요한 서비스입니다.");
+		return null;
 	}
 
 }

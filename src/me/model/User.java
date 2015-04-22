@@ -6,16 +6,18 @@ import next.database.annotation.Table;
 @Table
 public class User {
 
-	public User(Integer id, String nickName, Integer age) {
-		this.id = id;
-		this.nickName = nickName;
-		this.age = age;
-	}
-
 	@Key(AUTO_INCREMENT = true)
 	private Integer id;
 	private String nickName;
 	private Integer age;
+
+
+	public User(Integer id, String nickName, Integer age) {
+		super();
+		this.id = id;
+		this.nickName = nickName;
+		this.age = age;
+	}
 
 	public Integer getId() {
 		return id;
