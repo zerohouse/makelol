@@ -1,32 +1,32 @@
 package next.setting;
 
 public class TableOptions {
-	private String datatype;
-	private Boolean notnull;
+	private String dataType;
+	private Boolean notNull;
 	private Boolean hasDefaultValue;
 	private Object defaultValue;
 
-	public TableOptions(String datatype, Boolean notnull, Boolean hasDefaultValue, Object defaultValue) {
-		this.datatype = datatype;
-		this.notnull = notnull;
+	public TableOptions(String dataType, Boolean notNull, Boolean hasDefaultValue, Object defaultValue) {
+		this.dataType = dataType;
+		this.notNull = notNull;
 		this.hasDefaultValue = hasDefaultValue;
 		this.defaultValue = defaultValue;
 	}
 
-	public String getDatatype() {
-		return datatype;
+	public String getDataType() {
+		return dataType;
 	}
 
-	public void setDatatype(String datatype) {
-		this.datatype = datatype;
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	}
 
-	public Boolean getNotnull() {
-		return notnull;
+	public Boolean getNotNull() {
+		return notNull;
 	}
 
-	public void setNotnull(Boolean notnull) {
-		this.notnull = notnull;
+	public void setNotNull(Boolean notNull) {
+		this.notNull = notNull;
 	}
 
 	public Boolean getHasDefaultValue() {
@@ -44,6 +44,5 @@ public class TableOptions {
 	public void setDefaultValue(Object defaultValue) {
 		this.defaultValue = defaultValue;
 	}
-	
-	
+
 }

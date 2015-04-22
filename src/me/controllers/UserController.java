@@ -19,8 +19,7 @@ import next.mapping.response.support.Result;
 public class UserController {
 
 	@Mapping(value = "", before = { "" }, after = { "" }, method = Method.GET)
-	public Response getUser(@Parameter("userId") String userId, @SessionAttribute("user") User user) {
-		DAO dao = new DAO();
+	public Response getUser(@Parameter("userId") String userId, @SessionAttribute("user") User user, DAO dao) {
 		dao.insert(user);
 		dao.update(user);
 		dao.delete(user);

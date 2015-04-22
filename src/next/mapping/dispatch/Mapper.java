@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import next.database.ConnectionPool;
 import next.database.DAO;
-import next.database.TransactionSupport;
 import next.mapping.annotation.After;
 import next.mapping.annotation.Before;
 import next.mapping.annotation.Controller;
@@ -30,18 +30,20 @@ import org.slf4j.Logger;
 public class Mapper {
 
 	private static final Logger logger = LoggerUtil.getLogger(Mapper.class);
+
 	private Map<UriKey, MethodHolder> methodMap;
 	private UriMap uriMap;
 	private List<MethodHolder> beforeList;
 	private List<MethodHolder> afterList;
-	private static final String controllerPath = Setting.get().getMapping().getControllerPackage();
+	private ConnectionPool pool;
 
-	Mapper() {
+	Mapper(ConnectionPool pool) {
+		this.pool = pool;
 		methodMap = new HashMap<UriKey, MethodHolder>();
 		uriMap = new UriMap();
 		beforeList = new ArrayList<MethodHolder>();
 		afterList = new ArrayList<MethodHolder>();
-		Reflections ref = new Reflections(controllerPath, new SubTypesScanner(), new TypeAnnotationsScanner());
+		Reflections ref = new Reflections(Setting.get().getMapping().getControllerPackage(), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(Controller.class).forEach(cLass -> {
 			try {
 				makeMethodMap(cLass);
@@ -60,7 +62,7 @@ public class Mapper {
 			http.sendError(404);
 			return;
 		}
-		DAO dao = new DAO(new TransactionSupport());
+		DAO dao = new DAO(pool.getConnection(false));
 
 		Queue<MethodHolder> todo = new LinkedList<MethodHolder>();
 

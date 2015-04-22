@@ -12,9 +12,9 @@ public class ConnectionPool {
 
 	private static final String COM_MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
-	private static BoneCP pool;
+	private BoneCP pool;
 
-	public static Connection getConnection(boolean autocommit) {
+	public Connection getConnection(boolean autocommit) {
 		Connection connection = null;
 		try {
 			connection = pool.getConnection();
@@ -30,7 +30,7 @@ public class ConnectionPool {
 		pool.shutdown();
 	}
 
-	static {
+	public ConnectionPool() {
 		try {
 			Class.forName(COM_MYSQL_JDBC_DRIVER);
 		} catch (Exception e) {

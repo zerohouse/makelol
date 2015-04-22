@@ -28,40 +28,40 @@
         	"insertDataOnServerStart" : true,
 			"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
 			"stringOptions" : {
-				"DATATYPE" : "VARCHAR(255)",
-				"NOT NULL" : true,
+				"dataType" : "VARCHAR(255)",
+				"notNull" : true,
 				"hasDefaultValue" : true,
-				"DEFAULT" : ""
+				"defaultValue" : ""
 			},
 			"integerOptions" : {
-				"DATATYPE" : "INTEGER",
-				"NOT NULL" : true,
+				"dataType" : "INTEGER",
+				"notNull" : true,
 				"hasDefaultValue" : true,
-				"DEFAULT" : "0"
+				"defaultValue" : "0"
 			},
 			"booleanOptions" : {
-				"DATATYPE" : "TINYINT(1)",
-				"NOT NULL" : true,
+				"dataType" : "TINYINT(1)",
+				"notNull" : true,
 				"hasDefaultValue" : true,
-				"DEFAULT" : "0"
+				"defaultValue" : "0"
 			},
 			"dateOptions" : {
-				"DATATYPE" : "DATETIME",
-				"NOT NULL" : true,
+				"dataType" : "DATETIME",
+				"notNull" : true,
 				"hasDefaultValue" : true,
-				"DEFAULT" : "CURRENT_TIMESTAMP"
+				"defaultValue" : "CURRENT_TIMESTAMP"
 			},
 			"floatOptions" : {
-				"DATATYPE" : "FLOAT",
-				"NOT NULL" : true,
+				"dataType" : "FLOAT",
+				"notNull" : true,
 				"hasDefaultValue" : true,
-				"DEFAULT" : "0"
+				"defaultValue" : "0"
 			},
 			"longOptions" : {
-				"DATATYPE" : "BIGINT",
-				"NOT NULL" : true,
+				"dataType" : "BIGINT",
+				"notNull" : true,
 				"hasDefaultValue" : true,
-				"DEFAULT" : "0"
+				"defaultValue" : "0"
 			}
 		}
 	}

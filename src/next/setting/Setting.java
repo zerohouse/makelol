@@ -19,19 +19,20 @@ public class Setting {
 	}
 
 	public static Setting get() {
-		if (instance == null) {
-			Gson gson = new Gson();
-			try {
-				instance = gson.fromJson(new FileReader(Setting.class.getResource("/nextSetting.json").getFile()), Setting.class);
-			} catch (JsonSyntaxException e) {
-				e.printStackTrace();
-			} catch (JsonIOException e) {
-				e.printStackTrace();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
 		return instance;
+	}
+
+	static {
+		Gson gson = new Gson();
+		try {
+			instance = gson.fromJson(new FileReader(Setting.class.getResource("/nextSetting.json").getFile()), Setting.class);
+		} catch (JsonSyntaxException e) {
+			e.printStackTrace();
+		} catch (JsonIOException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Setting(MappingSetting mapping, DatabaseSetting database) {

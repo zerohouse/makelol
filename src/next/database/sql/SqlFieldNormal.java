@@ -61,7 +61,10 @@ public class SqlFieldNormal implements SqlField {
 		if (t.equals(Integer.class) || t.equals(int.class)) {
 			setSettings(options.getIntegerOptions());
 		} else if (t.equals(String.class)) {
-			setSettings(options.getStringOptions());
+			TableOptions to = options.getStringOptions();
+			if (to.getDefaultValue().equals(""))
+				to.setDefaultValue("''");
+			setSettings(to);
 		} else if (t.equals(Date.class)) {
 			setSettings(options.getDateOptions());
 		} else if (t.equals(long.class) || t.equals(Long.class)) {
@@ -80,15 +83,13 @@ public class SqlFieldNormal implements SqlField {
 	private void setSettings(TableOptions options) {
 		defaultValue = "";
 		nullType = "NULL";
-		this.type = options.getDatatype(); 
-		if (!options.getNotnull())
+		this.type = options.getDataType();
+		if (!options.getNotNull())
 			return;
 		nullType = "NOT " + nullType;
 		if (!options.getHasDefaultValue())
 			return;
 		String defaultvalue = options.getDefaultValue().toString();
-		if (type.equals("String") && defaultvalue.equals(""))
-			defaultvalue = "''";
 		defaultValue += "DEFAULT " + defaultvalue;
 	}
 

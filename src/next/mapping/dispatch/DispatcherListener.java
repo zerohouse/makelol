@@ -14,6 +14,7 @@ import next.setting.Setting;
 @WebListener
 public class DispatcherListener implements ServletContextListener {
 
+	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext sc = sce.getServletContext();
