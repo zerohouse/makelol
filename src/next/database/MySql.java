@@ -18,7 +18,7 @@ import next.util.LoggerUtil;
 
 import org.slf4j.Logger;
 
-public class DAOImpl implements DAO{
+public class MySql implements DAO{
 
 	private static final Logger logger = LoggerUtil.getLogger(DAO.class);
 
@@ -26,11 +26,11 @@ public class DAOImpl implements DAO{
 
 	private SqlSupports sqlSupports = SqlSupports.getInstance();
 
-	public DAOImpl(Connection conn) {
+	public MySql(Connection conn) {
 		this.conn = conn;
 	}
 
-	private PreparedStatement getPSTMT(String sql, Object[] parameters) {
+	private PreparedStatement getPSTMT(String sql, Object... parameters) {
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
