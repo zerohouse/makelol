@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import next.database.ConnectionPool;
 import next.database.DAO;
+import next.database.DAOImpl;
 import next.database.annotation.testdata.Insert;
 import next.database.annotation.testdata.InsertList;
 import next.database.annotation.testdata.TestData;
@@ -52,7 +53,7 @@ public class Dispatcher extends HttpServlet {
 			return;
 		Reflections ref = new Reflections(Setting.get().getDatabase().getTestDataPackage(), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(TestData.class).forEach(each -> {
-			DAO dao = new DAO(pool.getConnection(true));
+			DAO dao = new DAOImpl(pool.getConnection(true));
 			try {
 				Object obj = each.getConstructor().newInstance();
 				Field[] fields = each.getDeclaredFields();

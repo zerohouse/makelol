@@ -2,29 +2,27 @@
 편합니다!
 
 ## DAO.class
+    List<Object> getRecord(String sql, int resultSize, Object... parameters);
+	Map<String, Object> getRecordMap(String sql, Object... parameters);
+	List<List<Object>> getRecords(String sql, int resultSize, Object... parameters);
+	List<Map<String, Object>> getRecordMaps(String sql, Object... parameters);
+	<T> T getObject(String sql, Class<T> cLass, Object... parameters);
+	<T> T getObject(Class<T> cLass, Object... parameters);
+	<T> List<T> getObjects(String sql, Class<T> cLass, Object... parameters);
+	<T> List<T> getObjects(Class<T> cLass);
+	Boolean execute(String sql, Object... parameters);
+	void close();
+	boolean fill(Object record);
+	boolean insert(Object record);
+	boolean insertIfExistUpdate(Object record);
+	boolean update(Object record);
+	boolean delete(Object record);
+	BigInteger getLastKey();
     
-    public List<Object> getRecord(String sql, int resultSize, Object... parameters);
-	public Map<String, Object> getRecordMap(String sql, Object... parameters);
-	public List<List<Object>> getRecords(String sql, int resultSize, Object... parameters); 
-	public List<Map<String, Object>> getRecordsMap(String sql, Object... parameters);
-	public <T> T getRecord(Class<T> cLass, String sql, Object... parameters);
-	public boolean fill(Object record);
-	public <T> T getRecordByClass(Class<T> cLass, Object... parameters);
-	public <T> List<T> getRecords(Class<T> cLass, String sql, Object... parameters);
-	public <T> List<T> getRecordsByClass(Class<T> cLass, String sql, Object... parameters);
-	public <T> List<T> getRecordsByClass(Class<T> cLass);
-	public Boolean execute(String sql, Object... parameters);
-	public void close();
-	public boolean insert(Object record);
-    public boolean insertIfExistUpdate(Object record);
-	public boolean update(Object record);
-	public boolean delete(Object record);
-    public BigInteger getLastKey();
-    
-### Example
+### Example Usage
     DAO dao = new DAO();
-    User user = dao.getRecordByClass(User.class, userId);
-    List<User> users = dao.getRecordsByClass(User.class, "SELECT * FROM User Where User_Id=?", userId);
+    User user = dao.getObject(User.class, userId);
+    List<User> users = dao.getObjects(User.class, "SELECT * FROM User Where User_Id=?", userId);
     dao.insert(user);
     dao.update(user);
     dao.delete(user);
@@ -173,70 +171,70 @@ Json.class, Jsp.class
 
 # Setting (resource/nextSetting.json)
     {
-	"mapping" : {
-		"mappings" : ["/api/*", "/user/*"],
-		"characterEncoding" : "UTF-8",
-		"url":"localhost:8080",
-		"controllerPackage" : "me.controllers",
-		"jspPath" : "/WEB-INF/jsp/"
-	},
-	"logger" : {
-		"level" : "ALL",
-		"logFilePath" : "/log/",
-		"pattern" : "%level [%thread] %msg - %logger{10} : %file:%line %date%n"
-	},
-	"database" : {
-        "modelPackage" : "me.model",
-        "testDataPackage" : "me.model.test",
-        "connectionSetting" : {
-			"jdbcUrl" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
-        	"username" : "root",
-        	"password" : "",
-        	"minConnectionsPerPartition" : 5,
-			"maxConnectionsPerPartition" : 10,
-			"setPartitionCount" : 1
-        	},
-		"createOption" : {
-		    "createTablesOnServerStart" : true,
-        	"resetTablesOnServerStart" : false,
-        	"insertDataOnServerStart" : true,
-			"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
-			"stringOptions" : {
-				"dataType" : "VARCHAR(255)",
-				"notNull" : true,
-				"hasDefaultValue" : true,
-				"defaultValue" : ""
-			},
-			"integerOptions" : {
-				"dataType" : "INTEGER",
-				"notNull" : true,
-				"hasDefaultValue" : true,
-				"defaultValue" : "0"
-			},
-			"booleanOptions" : {
-				"dataType" : "TINYINT(1)",
-				"notNull" : true,
-				"hasDefaultValue" : true,
-				"defaultValue" : "0"
-			},
-			"dateOptions" : {
-				"dataType" : "DATETIME",
-				"notNull" : true,
-				"hasDefaultValue" : true,
-				"defaultValue" : "CURRENT_TIMESTAMP"
-			},
-			"floatOptions" : {
-				"dataType" : "FLOAT",
-				"notNull" : true,
-				"hasDefaultValue" : true,
-				"defaultValue" : "0"
-			},
-			"longOptions" : {
-				"dataType" : "BIGINT",
-				"notNull" : true,
-				"hasDefaultValue" : true,
-				"defaultValue" : "0"
+		"mapping" : {
+			"mappings" : ["/api/*", "/user/*"],
+			"characterEncoding" : "UTF-8",
+			"url":"localhost:8080",
+			"controllerPackage" : "me.controllers",
+			"jspPath" : "/WEB-INF/jsp/"
+		},
+		"logger" : {
+			"level" : "ALL",
+			"logFilePath" : "/log/",
+			"pattern" : "%level [%thread] %msg - %logger{10} : %file:%line %date%n"
+		},
+		"database" : {
+	        "modelPackage" : "me.model",
+	        "testDataPackage" : "me.model.test",
+	        "connectionSetting" : {
+				"jdbcUrl" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
+	        	"username" : "root",
+	        	"password" : "",
+	        	"minConnectionsPerPartition" : 5,
+				"maxConnectionsPerPartition" : 10,
+				"setPartitionCount" : 1
+	        	},
+			"createOption" : {
+			    "createTablesOnServerStart" : true,
+	        	"resetTablesOnServerStart" : false,
+	        	"insertDataOnServerStart" : true,
+				"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
+				"stringOptions" : {
+					"dataType" : "VARCHAR(255)",
+					"notNull" : true,
+					"hasDefaultValue" : true,
+					"defaultValue" : ""
+				},
+				"integerOptions" : {
+					"dataType" : "INTEGER",
+					"notNull" : true,
+					"hasDefaultValue" : true,
+					"defaultValue" : "0"
+				},
+				"booleanOptions" : {
+					"dataType" : "TINYINT(1)",
+					"notNull" : true,
+					"hasDefaultValue" : true,
+					"defaultValue" : "0"
+				},
+				"dateOptions" : {
+					"dataType" : "DATETIME",
+					"notNull" : true,
+					"hasDefaultValue" : true,
+					"defaultValue" : "CURRENT_TIMESTAMP"
+				},
+				"floatOptions" : {
+					"dataType" : "FLOAT",
+					"notNull" : true,
+					"hasDefaultValue" : true,
+					"defaultValue" : "0"
+				},
+				"longOptions" : {
+					"dataType" : "BIGINT",
+					"notNull" : true,
+					"hasDefaultValue" : true,
+					"defaultValue" : "0"
+				}
 			}
 		}
-	}
 	}

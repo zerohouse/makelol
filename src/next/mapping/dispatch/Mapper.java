@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import next.database.ConnectionPool;
 import next.database.DAO;
+import next.database.DAOImpl;
 import next.mapping.annotation.After;
 import next.mapping.annotation.Before;
 import next.mapping.annotation.Controller;
@@ -62,7 +63,7 @@ public class Mapper {
 			http.sendError(404);
 			return;
 		}
-		DAO dao = new DAO(pool.getConnection(false));
+		DAO dao = new DAOImpl(pool.getConnection(false));
 
 		Queue<MethodHolder> todo = new LinkedList<MethodHolder>();
 
