@@ -13,6 +13,8 @@ public class Jsp implements Response {
 
 	private String jspFileName;
 
+	private static final String PATH = Setting.getString("mapping", "jspPath");
+
 	private Map<String, Object> variables = new HashMap<String, Object>();
 
 	public Jsp() {
@@ -29,17 +31,17 @@ public class Jsp implements Response {
 	public void put(String key, Object obj) {
 		variables.put(key, obj);
 	}
-	
+
 	public Object get(String key) {
 		return variables.get(key);
 	}
 
 	public void render(Http http) {
 		for (Map.Entry<String, Object> entry : variables.entrySet()) {
-		    http.setAttribute(entry.getKey(), entry.getValue());
+			http.setAttribute(entry.getKey(), entry.getValue());
 		}
 		try {
-			http.forword(Setting.getString("jspPath") + jspFileName);
+			http.forword(PATH + jspFileName);
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 		}

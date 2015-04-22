@@ -34,14 +34,14 @@ public class Mapper {
 	private UriMap uriMap;
 	private List<MethodHolder> beforeList;
 	private List<MethodHolder> afterList;
-
+	private static final String controllerPath = Setting.getString("mapping", "controllerPackage");
 
 	Mapper() {
 		methodMap = new HashMap<UriKey, MethodHolder>();
 		uriMap = new UriMap();
 		beforeList = new ArrayList<MethodHolder>();
 		afterList = new ArrayList<MethodHolder>();
-		Reflections ref = new Reflections(Setting.getString("controllerPath"), new SubTypesScanner(), new TypeAnnotationsScanner());
+		Reflections ref = new Reflections(controllerPath, new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(Controller.class).forEach(cLass -> {
 			try {
 				makeMethodMap(cLass);
@@ -76,11 +76,14 @@ public class Mapper {
 			if (returned == null)
 				continue;
 			dao.close();
-			if (returned.getClass().getInterfaces()[0].equals(Response.class))
-				((Response) returned).render(http);
-			else
+			if (returned.getClass().getInterfaces().length == 0) {
 				new Json(returned).render(http);
-			break;
+				break;
+			}
+			if (returned.getClass().getInterfaces()[0].equals(Response.class)) {
+				((Response) returned).render(http);
+				break;
+			}
 		}
 	}
 
@@ -146,6 +149,5 @@ public class Mapper {
 			methodList.add(methodMap.get(new UriKey(UriKey.METHOD, stringArray[j])));
 		}
 	}
-
 
 }

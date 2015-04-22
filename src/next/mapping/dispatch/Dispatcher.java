@@ -14,6 +14,7 @@ import next.database.annotation.testdata.Insert;
 import next.database.annotation.testdata.InsertList;
 import next.database.annotation.testdata.TestData;
 import next.database.maker.PackageCreator;
+import next.mapping.http.Http;
 import next.mapping.http.HttpImpl;
 import next.setting.Setting;
 
@@ -28,6 +29,15 @@ public class Dispatcher extends HttpServlet {
 	private Mapper mapper;
 
 	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Http http = new HttpImpl(req, resp);
+		String encording = Setting.getString("mapping", "characterEncoding");
+		if (encording != null && !"".equals(encording))
+			http.setCharacterEncoding(encording);
+		mapper.execute(new UriKey(req.getMethod(), req.getRequestURI()), http);
+	}
+
+	@Override
 	public void init() throws ServletException {
 		mapper = new Mapper();
 		databseSetting();
@@ -37,7 +47,7 @@ public class Dispatcher extends HttpServlet {
 	private void InsertTestData() {
 		if (!Boolean.parseBoolean(Setting.getString("database", "insertDataOnServerStart")))
 			return;
-		Reflections ref = new Reflections(Setting.getString("database", "testDataPath"), new SubTypesScanner(), new TypeAnnotationsScanner());
+		Reflections ref = new Reflections(Setting.getString("database", "testDataPackage"), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(TestData.class).forEach(each -> {
 			DAO dao = new DAO();
 			try {
@@ -73,12 +83,7 @@ public class Dispatcher extends HttpServlet {
 		boolean reset = Boolean.parseBoolean(Setting.getString("database", "createOption", "resetTablesOnServerStart"));
 		if (!(create || reset))
 			return;
-		PackageCreator.createTable(reset, Setting.getString("database", "modelPath"));
-	}
-
-	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		mapper.execute(new UriKey(req.getMethod(), req.getRequestURI()), new HttpImpl(req, resp));
+		PackageCreator.createTable(reset, Setting.getString("database", "modelPackage"));
 	}
 
 }

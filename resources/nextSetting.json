@@ -1,16 +1,19 @@
 {
-	"url":"localhost:8080",
-	"mapping" : ["/api/*", "/user/*"],
-	"controllerPath" : "me.controllers",
-	"jspPath" : "/WEB-INF/jsp/",
+	"mapping" : {
+		"mapping" : ["/api/*", "/user/*"],
+		"characterEncoding" : "UTF-8",
+		"url":"localhost:8080",
+		"controllerPackage" : "me.controllers",
+		"jspPath" : "/WEB-INF/jsp/"
+	},
 	"logger" : {
 		"level" : "ALL",
 		"logPath" : "/log/",
 		"pattern" : "%level [%thread] %msg - %logger{10} : %file:%line %date%n"
 	},
 	"database" : {
-        "modelPath" : "me.model",
-        "testDataPath" : "me.model.test",
+        "modelPackage" : "me.model",
+        "testDataPackage" : "me.model.test",
         "insertDataOnServerStart" : true,
         "connectionPool(boneCp)" : {
 			"jdbcUrl" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",

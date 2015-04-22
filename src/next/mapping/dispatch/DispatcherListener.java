@@ -17,7 +17,7 @@ public class DispatcherListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext sc = sce.getServletContext();
-		Object mapping = Setting.get("mapping");
+		Object mapping = Setting.get("mapping", "mapping");
 		ServletRegistration.Dynamic dispatcher = sc.addServlet("Dispatcher", "next.mapping.dispatch.Dispatcher");
 		dispatcher.setLoadOnStartup(1);
 		if (mapping.getClass().equals(String.class)) {
@@ -32,11 +32,6 @@ public class DispatcherListener implements ServletContextListener {
 			});
 			return;
 		}
-
-		// FilterRegistration fr = sc.addFilter("CViewerFilter",
-		// "org.apache.geronimo.samples.javaee6.cviewer.CviewerFilter");
-		// fr.addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST),
-		// true, "ClassViewer");
 	}
 
 	@Override

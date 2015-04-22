@@ -35,7 +35,7 @@ public class SqlSupports {
 		sqlFieldMap = new HashMap<Field, SqlField>();
 		tableNameMap = new HashMap<Class<?>, String>();
 
-		Reflections ref = new Reflections(Setting.getString("database", "modelPath"), new SubTypesScanner(), new TypeAnnotationsScanner());
+		Reflections ref = new Reflections(Setting.getString("database", "modelPackage"), new SubTypesScanner(), new TypeAnnotationsScanner());
 		ref.getTypesAnnotatedWith(Table.class).forEach(cLass -> {
 
 			String tableName = cLass.getSimpleName();

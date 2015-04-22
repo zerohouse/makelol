@@ -22,7 +22,7 @@ public class DAO {
 	private static final Logger logger = LoggerUtil.getLogger(DAO.class);
 
 	private ConnectManager conn;
-	
+
 	private SqlSupports sqlSupports = SqlSupports.getInstance();
 
 	public DAO(ConnectManager conn) {
@@ -40,7 +40,7 @@ public class DAO {
 		try {
 			pstmt = conn.getPSTMT(sql, parameters);
 			rs = pstmt.executeQuery();
-			while (rs.next()) {
+			if (rs.next()) {
 				if (record == null)
 					record = new ArrayList<Object>();
 				for (int i = 0; i < resultSize; i++) {
@@ -222,7 +222,6 @@ public class DAO {
 	public void close() {
 		conn.close();
 	}
-
 
 	private final static String INSERT = "INSERT %s SET %s";
 
