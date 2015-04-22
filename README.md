@@ -1,5 +1,7 @@
-# Next JDBC Library
+# Next MVC + JDBC Library
 편합니다!
+
+# JDBC
 
 ## DAO.class
     List<Object> getRecord(String sql, int resultSize, Object... parameters);
@@ -80,8 +82,7 @@
 
 <br><br><br><br><br>
 
-# Next Mapping Library
-스프링이랑 비슷합니다.
+# MVC
 
 # Object
 
@@ -155,13 +156,13 @@ Json.class, Jsp.class
             return new Result("로그인이 필요한 서비스입니다.");
     }
     
-### @Parameter, @JsonParameter, @SessionAttribute
+### @Parameter, @JsonParameter, @SessionAttribute, @FromDB(keyParameter="?")
     String value(); // 해당하는 속성키
 	boolean require() default true; // True일때, 해당 속성이 없으면 에러를 Response함
     
 ### Example
     @Mapping(value = "/post/update", before = "loginCheck", method = Method.POST)
-    public Response updatePost(@Parameter("userId") String userId,
+    public Response updatePost(@FromDB(keyParameter = "userId") User user1, @Parameter("userId") String userId,
              @JsonParameter("Post") Post post, @SessionAttribute("user") User user) {
         if(!post.getUserId().equals(user.getId()))
             return new Json("권한이 없습니다");

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import next.database.DAO;
+import next.mapping.annotation.parameters.FromDB;
 import next.mapping.annotation.parameters.JsonParameter;
 import next.mapping.annotation.parameters.Parameter;
 import next.mapping.annotation.parameters.SessionAttribute;
@@ -89,6 +90,18 @@ public class MethodHolder {
 				if (session.require() && value == null)
 					throw new RequiredParamNullException("세션이 만료되었거나 잘못된 접근입니다.");
 				parameterArray.add(value);
+				continue;
+			}
+			if (obj[i].isAnnotationPresent(FromDB.class)) {
+				FromDB param = obj[i].getAnnotation(FromDB.class);
+				String name = param.keyParameter();
+				String value = http.getParameter(name);
+				if (param.require() && value == null)
+					throw new RequiredParamNullException("필수 파라미터가 빠졌습니다.");
+				Object fromDB = dao.getObject(types[i], value);
+				if (param.require() && fromDB == null)
+					throw new RequiredParamNullException("해당 레코드가 없습니다.");
+				parameterArray.add(fromDB);
 				continue;
 			}
 			parameterArray.add(null);
