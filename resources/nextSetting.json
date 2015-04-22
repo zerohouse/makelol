@@ -25,7 +25,7 @@
 		"createOption" : {
 		    "createTablesOnServerStart" : true,
         	"resetTablesOnServerStart" : false,
-        	"insertDataOnServerStart" : true,
+        	"insertDataOnServerStart" : false,
 			"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
 			"stringOptions" : {
 				"dataType" : "VARCHAR(255)",
