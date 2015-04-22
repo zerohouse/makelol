@@ -37,7 +37,7 @@
 
 ### Example Usage
     PackageCreator.createTable(reset, "me.model"); // 해당 패키지 내의 테이블 생성
-    TableMaker tm = new TableMaker(cLass, dao); // 해당 클래스의 테이블 생성
+    TableMaker tm = new TableMaker(User.class, dao); // User 테이블 생성
     tm.dropTable();
 	tm.createTable();
     tm.reset(); // 드롭 후 크리에이트
@@ -173,70 +173,70 @@ Json.class, Jsp.class
 
 # Setting (resource/nextSetting.json)
     {
-        "mapping" : {
-    		"mapping" : ["/api/*", "/user/*"],
-    		"characterEncoding" : "UTF-8",
-    		"url":"localhost:8080",
-    		"controllerPackage" : "me.controllers",
-    		"jspPath" : "/WEB-INF/jsp/"
-    	},
-    	"logger" : {
-    		"level" : "ALL",
-    		"logPath" : "/log/",
-    		"pattern" : "%level [%thread] %msg - %logger{10} : %file:%line %date%n"
-    	},
-    	"database" : {
-            "modelPackage" : "me.model",
-            "testDataPackage" : "me.model.test",
-            "insertDataOnServerStart" : true,
-            "connectionPool(boneCp)" : {
-    			"jdbcUrl" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
-            	"username" : "root",
-            	"password" : "",
-            	"minConnectionsPerPartition" : 5,
-    			"maxConnectionsPerPartition" : 10,
-    			"setPartitionCount" : 1
-            	},
-    		"createOption" : {
-    		    "createTablesOnServerStart" : true,
-            	"resetTablesOnServerStart" : false,
-    			"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
-    			"String" : {
-    				"DATATYPE" : "VARCHAR(255)",
-    				"NOT NULL" : true,
-    				"hasDefaultValue" : true,
-    				"DEFAULT" : ""
-    			},
-    			"Integer" : {
-    				"DATATYPE" : "INTEGER",
-    				"NOT NULL" : true,
-    				"hasDefaultValue" : true,
-    				"DEFAULT" : "0"
-    			},
-    			"Boolean" : {
-    				"DATATYPE" : "TINYINT(1)",
-    				"NOT NULL" : true,
-    				"hasDefaultValue" : true,
-    				"DEFAULT" : "0"
-    			},
-    			"Date" : {
-    				"DATATYPE" : "DATETIME",
-    				"NOT NULL" : true,
-    				"hasDefaultValue" : true,
-    				"DEFAULT" : "CURRENT_TIMESTAMP"
-    			},
-    			"Float" : {
-    				"DATATYPE" : "FLOAT",
-    				"NOT NULL" : true,
-    				"hasDefaultValue" : true,
-    				"DEFAULT" : "0"
-    			},
-    			"Long" : {
-    				"DATATYPE" : "BIGINT",
-    				"NOT NULL" : true,
-    				"hasDefaultValue" : true,
-    				"DEFAULT" : "0"
-    			}
-    		}
-    	}
-    }
+	"mapping" : {
+		"mappings" : ["/api/*", "/user/*"],
+		"characterEncoding" : "UTF-8",
+		"url":"localhost:8080",
+		"controllerPackage" : "me.controllers",
+		"jspPath" : "/WEB-INF/jsp/"
+	},
+	"logger" : {
+		"level" : "ALL",
+		"logFilePath" : "/log/",
+		"pattern" : "%level [%thread] %msg - %logger{10} : %file:%line %date%n"
+	},
+	"database" : {
+        "modelPackage" : "me.model",
+        "testDataPackage" : "me.model.test",
+        "connectionSetting" : {
+			"jdbcUrl" : "jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8",
+        	"username" : "root",
+        	"password" : "",
+        	"minConnectionsPerPartition" : 5,
+			"maxConnectionsPerPartition" : 10,
+			"setPartitionCount" : 1
+        	},
+		"createOption" : {
+		    "createTablesOnServerStart" : true,
+        	"resetTablesOnServerStart" : false,
+        	"insertDataOnServerStart" : true,
+			"table_suffix" : "ENGINE = InnoDB DEFAULT CHARACTER SET utf8",
+			"stringOptions" : {
+				"dataType" : "VARCHAR(255)",
+				"notNull" : true,
+				"hasDefaultValue" : true,
+				"defaultValue" : ""
+			},
+			"integerOptions" : {
+				"dataType" : "INTEGER",
+				"notNull" : true,
+				"hasDefaultValue" : true,
+				"defaultValue" : "0"
+			},
+			"booleanOptions" : {
+				"dataType" : "TINYINT(1)",
+				"notNull" : true,
+				"hasDefaultValue" : true,
+				"defaultValue" : "0"
+			},
+			"dateOptions" : {
+				"dataType" : "DATETIME",
+				"notNull" : true,
+				"hasDefaultValue" : true,
+				"defaultValue" : "CURRENT_TIMESTAMP"
+			},
+			"floatOptions" : {
+				"dataType" : "FLOAT",
+				"notNull" : true,
+				"hasDefaultValue" : true,
+				"defaultValue" : "0"
+			},
+			"longOptions" : {
+				"dataType" : "BIGINT",
+				"notNull" : true,
+				"hasDefaultValue" : true,
+				"defaultValue" : "0"
+			}
+		}
+	}
+	}
